@@ -22,7 +22,7 @@ func (container *Container) SetConstructor(funcName string) {
 	container.constructor = funcName
 }
 
-func (container *Container) Provide(key string, instance any) error {
+func (container *Container) Provide(key string, instance any, params ...any) error {
 	refType := reflect.TypeOf(instance)
 	refValue := reflect.ValueOf(instance)
 	isStruct := refType.Kind() == reflect.Struct
@@ -108,7 +108,12 @@ func (container *Container) Provide(key string, instance any) error {
 		}
 	}
 	if initExists {
-		initMethod.Func.Call([]reflect.Value{refValue.Addr()})
+		args := make([]reflect.Value, len(params)+1)
+		args[0] = refValue.Addr()
+		for index, param := range params {
+			args[index+1] = reflect.ValueOf(param)
+		}
+		initMethod.Func.Call(args)
 	}
 	container.di.Store(key, instance)
 	return nil
