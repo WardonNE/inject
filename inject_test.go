@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewContainer(t *testing.T) {
-	assert.Equal(t, &container{constructor: "Init"}, NewContainer())
+	assert.Equal(t, &Container{constructor: "Init"}, NewContainer())
 }
 
 func TestSetConstruct(t *testing.T) {

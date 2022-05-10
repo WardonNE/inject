@@ -7,22 +7,22 @@ import (
 	"sync"
 )
 
-type container struct {
+type Container struct {
 	constructor string
 	di          sync.Map
 }
 
-func NewContainer() *container {
-	container := &container{}
+func NewContainer() *Container {
+	container := &Container{}
 	container.constructor = "Init"
 	return container
 }
 
-func (container *container) SetConstructor(funcName string) {
+func (container *Container) SetConstructor(funcName string) {
 	container.constructor = funcName
 }
 
-func (container *container) Provide(key string, instance any) error {
+func (container *Container) Provide(key string, instance any) error {
 	refType := reflect.TypeOf(instance)
 	refValue := reflect.ValueOf(instance)
 	isStruct := refType.Kind() == reflect.Struct
@@ -114,11 +114,11 @@ func (container *container) Provide(key string, instance any) error {
 	return nil
 }
 
-func (container *container) Load(key string) (any, bool) {
+func (container *Container) Load(key string) (any, bool) {
 	return container.di.Load(key)
 }
 
-func (container *container) LoadOrStore(key string, instance any) (any, error) {
+func (container *Container) LoadOrStore(key string, instance any) (any, error) {
 	object, ok := container.Load(key)
 	if ok {
 		return object, nil
