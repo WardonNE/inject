@@ -133,3 +133,7 @@ func (container *Container) LoadOrStore(key string, instance any) (any, error) {
 	}
 	return instance, nil
 }
+
+func (container *Container) Each(fn func(key, value any) bool) {
+	container.di.Range(fn)
+}
